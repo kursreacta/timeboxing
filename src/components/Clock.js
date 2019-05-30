@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 
 function Clock({ className, minutes, seconds }) {
-    return <h2 className={"Clock " + className}>Pozostało {minutes}:{seconds}</h2>
+    return <h2 style={{}} className={"Clock  " + className}>Pozostało {minutes}:{seconds}</h2>
 }
 Clock.defaultProps = {
     className: ""
