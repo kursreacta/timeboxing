@@ -14,7 +14,7 @@ const timeboxes = [
     { "id": 4, "title": "Uczę się fetch", "totalTimeInMinutes": 5 }
 ];
 function findIndexByAnId(id) {
-    const result = timeboxes.findIndex((timebox) => timebox.id == id)
+    const result = timeboxes.findIndex((timebox) => timebox.id === id)
     if (result < 0) {
         throw new Error("Timebox o podanym id nie istnieje");
     }
