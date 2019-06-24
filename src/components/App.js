@@ -6,7 +6,7 @@ import ErrorBoundary from "./ErrorBoundary";
 import LoginForm from "./LoginForm";
 import AuthenticationAPI from "../api/FetchAuthenticationApi";
 import jwt from "jsonwebtoken";
-
+ 
 class App extends React.Component {
     state = {
         accessToken: null,
@@ -54,7 +54,7 @@ class App extends React.Component {
                                 Witaj {this.getUserEmail()}
                                 <a onClick={this.handleLogout}className="header__logout-link" href="#">Wyloguj się</a>
                             </header>
-                            <TimeboxList />
+                            <TimeboxList accessToken={this.state.accessToken} />
                             <EditableTimebox />
                         </> :
                         <LoginForm 
