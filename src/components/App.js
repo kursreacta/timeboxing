@@ -1,12 +1,11 @@
 import React from "react";
 
-import EditableTimebox from "./EditableTimebox";
-import TimeboxList from "./TimeboxList";
 import ErrorBoundary from "./ErrorBoundary";
+import AuthenticatedApp from "./AuthenticatedApp";
 import LoginForm from "./LoginForm";
+import AuthenticationContext from "../contexts/AuthenticationContext";
 import AuthenticationAPI from "../api/FetchAuthenticationApi";
-import jwt from "jsonwebtoken";
- 
+
 class App extends React.Component {
     state = {
         accessToken: null,
@@ -15,11 +14,6 @@ class App extends React.Component {
 
     isUserLoggedIn() {
         return !!this.state.accessToken;
-    }
-
-    getUserEmail() {
-        const decodedToken = jwt.decode(this.state.accessToken);
-        return decodedToken.email;
     }
 
     handleLoginAttempt = (credentials) => {
@@ -49,14 +43,9 @@ class App extends React.Component {
                 <ErrorBoundary message="Coś nie działa w całej aplikacji">
                     {
                         this.isUserLoggedIn() ?
-                        <>
-                            <header className="header">
-                                Witaj {this.getUserEmail()}
-                                <a onClick={this.handleLogout}className="header__logout-link" href="#">Wyloguj się</a>
-                            </header>
-                            <TimeboxList accessToken={this.state.accessToken} />
-                            <EditableTimebox />
-                        </> :
+                        <AuthenticationContext.Provider value={ {accessToken: this.state.accessToken} }>
+                            {<AuthenticatedApp onLogout={this.handleLogout} /> }
+                        </AuthenticationContext.Provider> :
                         <LoginForm 
                             errorMessage={ this.state.previousLoginAttemptFailed ? "Nie udało się zalogować" : null} 
                             onLoginAttempt={this.handleLoginAttempt}    
