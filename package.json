@@ -5,6 +5,7 @@
   "dependencies": {
     "axios": "^0.19.0",
     "classnames": "^2.2.6",
+    "inspirational-quotes": "^1.0.8",
     "jsonwebtoken": "^8.5.1",
     "node-sass": "^4.11.0",
     "react": "^16.8.6",
