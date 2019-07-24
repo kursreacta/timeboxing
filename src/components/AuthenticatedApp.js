@@ -1,14 +1,14 @@
 import React from "react";
 import Header from "./Header";
 import EditableTimebox from "./EditableTimebox";
-import TimeboxList from "./TimeboxList";
+import TimeboxesManager from "./TimeboxesManager";
 import InspirationalQuote from "./InspirationalQuote";
 
 function AuthenticatedApp({ onLogout}) {
     return (
         <>
             <Header onLogout={onLogout} />
-            <TimeboxList />
+            <TimeboxesManager />
             <EditableTimebox />
             <InspirationalQuote />
         </>

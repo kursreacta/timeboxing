@@ -1,11 +1,11 @@
 import React from "react";
 
-import Timebox from "./Timebox";
 import TimeboxCreator from "./TimeboxCreator";
 import TimeboxesAPI from "../api/FetchTimeboxesApi";
 import AuthenticationContext from "../contexts/AuthenticationContext";
+import { TimeboxesList } from "./TimeboxesList";
  
-class TimeboxList extends React.Component {
+class TimeboxesManager extends React.Component {
     state = {
         "timeboxes": [],
         loading: true,
@@ -67,21 +67,15 @@ class TimeboxList extends React.Component {
                 <TimeboxCreator onCreate={this.handleCreate} />
                 { this.state.loading ? "Timeboxy się ładują..." : null}
                 { this.state.error ? "Nie udało się załadować :(" : null }
-                {
-                    this.state.timeboxes.map((timebox, index) => (
-                        <Timebox 
-                            key={timebox.id} 
-                            title={timebox.title} 
-                            totalTimeInMinutes={timebox.totalTimeInMinutes}
-                            onDelete={() => this.removeTimebox(index)}
-                            onEdit={() => this.updateTimebox(index, {...timebox, title: "Updated timebox"})}
-                        />
-                    ))
-                }
+                <TimeboxesList 
+                    timeboxes={this.state.timeboxes} 
+                    onTimeboxDelete={this.removeTimebox}
+                    onTimeboxEdit={this.updateTimebox}
+                />
             </>
         )
     }
 }
-TimeboxList.contextType = AuthenticationContext;
+TimeboxesManager.contextType = AuthenticationContext;
 
-export default TimeboxList;
+export default TimeboxesManager;
