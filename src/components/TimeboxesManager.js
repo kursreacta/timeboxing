@@ -63,7 +63,7 @@ class TimeboxesManager extends React.Component {
         }
         
     }
-    renderTimebox(timebox, index) {
+    renderTimebox = (timebox, index) => {
         return <Timebox 
             key={timebox.id} 
             title={timebox.title} 
