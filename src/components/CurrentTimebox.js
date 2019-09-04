@@ -70,13 +70,13 @@ class CurrentTimebox extends React.Component {
     }
     render() {
         const { isPaused, isRunning, pausesCount, elapsedTimeInSeconds } = this.state;
-        const { title, totalTimeInMinutes, isEditable, onEdit } = this.props;
+        const { title, totalTimeInMinutes } = this.props;
         const totalTimeInSeconds = totalTimeInMinutes * 60;
         const timeLeftInSeconds = totalTimeInSeconds - elapsedTimeInSeconds;
         const [minutesLeft, secondsLeft] = getMinutesAndSecondsFromDurationInSeconds(timeLeftInSeconds)
         const progressInPercent = (elapsedTimeInSeconds / totalTimeInSeconds) * 100.0;
         return (
-            <div className={`CurrentTimebox ${isEditable ? "inactive" : ""}`}>
+            <div className="CurrentTimebox">
                 <h1>{title}</h1>
                 <Clock minutes={minutesLeft} seconds={secondsLeft} className={isPaused ? "inactive" : ""}/>
                 <ProgressBar 
@@ -85,7 +85,6 @@ class CurrentTimebox extends React.Component {
                     color="red"
                     big
                 />
-                <button onClick={onEdit} disabled={isEditable}>Edytuj</button>
                 <button onClick={this.handleStart} disabled={isRunning}>Start</button>
                 <button onClick={this.handleStop} disabled={!isRunning}>Stop</button>
                 <button onClick={this.togglePause} disabled={!isRunning}>{isPaused ? "Wznów" : "Pauzuj"}</button>

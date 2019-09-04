@@ -1,6 +1,6 @@
 import React from "react";
 import Header from "./Header";
-import EditableTimebox from "./EditableTimebox";
+import CurrentTimebox from "./CurrentTimebox";
 import TimeboxesManager from "./TimeboxesManager";
 import InspirationalQuote from "./InspirationalQuote";
 
@@ -9,7 +9,10 @@ function AuthenticatedApp({ onLogout}) {
         <>
             <Header onLogout={onLogout} />
             <TimeboxesManager />
-            <EditableTimebox />
+            <CurrentTimebox 
+                        title="Uczę się zaawansowanych wzorców" 
+                        totalTimeInMinutes={4} 
+                    />
             <InspirationalQuote />
         </>
     );
