@@ -6,10 +6,12 @@ import AuthenticationContext from "../contexts/AuthenticationContext";
 import { TimeboxesList } from "./TimeboxesList";
 import Timebox from "./Timebox";
 import ReadOnlyTimebox from "./ReadOnlyTimebox";
+import TimeboxEditor from "./TimeboxEditor";
 
 class TimeboxesManager extends React.Component {
     state = {
         "timeboxes": [],
+        editIndex: null,
         loading: true,
         error: null
     }
@@ -64,13 +66,26 @@ class TimeboxesManager extends React.Component {
         
     }
     renderTimebox = (timebox, index) => {
-        return <Timebox 
-            key={timebox.id} 
-            title={timebox.title} 
-            totalTimeInMinutes={timebox.totalTimeInMinutes} 
-            onDelete={() => this.removeTimebox(index)} 
-            onEdit={() => this.updateTimebox(index, { ...timebox, title: "Updated timebox" })} 
-        />
+        return <>
+            {this.state.editIndex === index ? 
+                <TimeboxEditor 
+                    initialTitle={timebox.title}
+                    initialTotalTimeInMinutes={timebox.totalTimeInMinutes}
+                    onCancel={() => this.setState({ editIndex: null })}
+                    onUpdate={(updatedTimebox) => {
+                        this.updateTimebox(index, { ...timebox, ...updatedTimebox });
+                        this.setState({ editIndex: null });
+                    }}
+                /> :
+                <Timebox 
+                    key={timebox.id} 
+                    title={timebox.title} 
+                    totalTimeInMinutes={timebox.totalTimeInMinutes} 
+                    onDelete={() => this.removeTimebox(index)} 
+                    onEdit={() => this.setState({ editIndex: index })} 
+                />
+            }
+        </>
     }
     renderReadOnlyTimebox(timebox, index) {
         return <ReadOnlyTimebox
