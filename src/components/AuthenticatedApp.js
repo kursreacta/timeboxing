@@ -14,7 +14,7 @@ function AuthenticatedApp({ onLogout }) {
             </Header>
             <TimeboxesManager />
             <CurrentTimebox 
-                        title="Uczę się zaawansowanych wzorców" 
+                        title="Optymalizuję aplikacje" 
                         totalTimeInMinutes={4} 
                     />
             <InspirationalQuote />
