@@ -14,8 +14,8 @@ function AuthenticatedApp({ onLogout }) {
             </Header>
             <TimeboxesManager />
             <CurrentTimebox 
-                        title="Optymalizuję aplikacje" 
-                        totalTimeInMinutes={4} 
+                        title="Opanowuję Redux" 
+                        totalTimeInMinutes={29} 
                     />
             <InspirationalQuote />
         </>
