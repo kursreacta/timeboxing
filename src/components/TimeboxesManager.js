@@ -7,8 +7,9 @@ import { TimeboxesList } from "./TimeboxesList";
 import Timebox from "./Timebox";
 import ReadOnlyTimebox from "./ReadOnlyTimebox";
 import TimeboxEditor from "./TimeboxEditor";
-import { timeboxesReducer} from "../reducers";
+import { timeboxesReducer, isTimeboxEdited, areTimeboxesLoading, getTimeboxesLoadingError, getAllTimeboxes } from "../reducers";
 import { setTimeboxes, setError, disableLoadingIndicator, addTimebox, replaceTimebox, removeTimebox, stopEditingTimebox, startEditingTimebox } from "../actions";
+
 
 function TimeboxesManager() {
 
@@ -38,7 +39,7 @@ function TimeboxesManager() {
     }
     const renderTimebox = (timebox) => {
         return <>
-            {state.currentlyEditedTimeboxId === timebox.id ? 
+            {isTimeboxEdited(state, timebox) ? 
                 <TimeboxEditor 
                     initialTitle={timebox.title}
                     initialTotalTimeInMinutes={timebox.totalTimeInMinutes}
@@ -75,17 +76,17 @@ function TimeboxesManager() {
         />
     }
     
-        return (
-            <>
-                <TimeboxCreator onCreate={handleCreate} />
-                { state.loading ? "Timeboxy się ładują..." : null}
-                { state.error ? "Nie udało się załadować :(" : null }
-                <TimeboxesList 
-                    timeboxes={state.timeboxes} 
-                    renderTimebox={renderTimebox}
-                />
-            </>
-        )
+    return (
+        <>
+            <TimeboxCreator onCreate={handleCreate} />
+            { areTimeboxesLoading(state) ? "Timeboxy się ładują..." : null}
+            { getTimeboxesLoadingError(state) ? "Nie udało się załadować :(" : null }
+            <TimeboxesList 
+                timeboxes={getAllTimeboxes(state)} 
+                renderTimebox={renderTimebox}
+            />
+        </>
+    )
     
 }
 
