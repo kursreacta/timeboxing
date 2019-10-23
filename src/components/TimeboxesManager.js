@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-
+import { useStore } from "react-redux";
 import TimeboxCreator from "./TimeboxCreator";
 import TimeboxesAPI from "../api/FetchTimeboxesApi";
 import AuthenticationContext from "../contexts/AuthenticationContext";
@@ -7,12 +7,8 @@ import { TimeboxesList } from "./TimeboxesList";
 import Timebox from "./Timebox";
 import ReadOnlyTimebox from "./ReadOnlyTimebox";
 import TimeboxEditor from "./TimeboxEditor";
-import { timeboxesReducer, isTimeboxEdited, areTimeboxesLoading, getTimeboxesLoadingError, getAllTimeboxes } from "../reducers";
+import { isTimeboxEdited, areTimeboxesLoading, getTimeboxesLoadingError, getAllTimeboxes } from "../reducers";
 import { setTimeboxes, setError, disableLoadingIndicator, addTimebox, replaceTimebox, removeTimebox, stopEditingTimebox, startEditingTimebox } from "../actions";
-
-import { createStore } from "redux";
-
-const store = createStore(timeboxesReducer);
 
 function useForceUpdate() {
     const [updateCounter, setUpdateCounter] = useState(0);
@@ -22,6 +18,7 @@ function useForceUpdate() {
     return forceUpdate;
 }
 function TimeboxesManager() {
+    const store = useStore();
     const forceUpdate = useForceUpdate();
     const state = store.getState();
     const dispatch = store.dispatch;
