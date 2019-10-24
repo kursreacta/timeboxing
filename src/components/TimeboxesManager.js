@@ -3,14 +3,13 @@ import { useStore } from "react-redux";
 import TimeboxCreator from "./TimeboxCreator";
 import TimeboxesAPI from "../api/FetchTimeboxesApi";
 import AuthenticationContext from "../contexts/AuthenticationContext";
-import { TimeboxesList } from "./TimeboxesList";
-import Timebox from "./Timebox";
+import { AllTimeboxesList } from "./TimeboxesList";
 import ReadOnlyTimebox from "./ReadOnlyTimebox";
-import TimeboxEditor from "./TimeboxEditor";
-import { isTimeboxEdited, areTimeboxesLoading, getTimeboxesLoadingError, getAllTimeboxes } from "../reducers";
-import { setTimeboxes, setError, disableLoadingIndicator, addTimebox, replaceTimebox, removeTimebox, stopEditingTimebox, startEditingTimebox } from "../actions";
+import { areTimeboxesLoading, getTimeboxesLoadingError } from "../reducers";
+import { setTimeboxes, setError, disableLoadingIndicator, addTimebox, replaceTimebox, removeTimebox, stopEditingTimebox } from "../actions";
+import { EditableTimebox } from "./EditableTimebox";
 
-function useForceUpdate() {
+export function useForceUpdate() {
     const [updateCounter, setUpdateCounter] = useState(0);
     function forceUpdate() {
         setUpdateCounter(prevCounter => prevCounter + 1);
@@ -47,35 +46,24 @@ function TimeboxesManager() {
         
     }
     const renderTimebox = (timebox) => {
-        return <>
-            {isTimeboxEdited(state, timebox) ? 
-                <TimeboxEditor 
-                    initialTitle={timebox.title}
-                    initialTotalTimeInMinutes={timebox.totalTimeInMinutes}
-                    onCancel={() => dispatch(stopEditingTimebox())}
-                    onUpdate={(updatedTimebox) => {
-                        const timeboxToUpdate = { ...timebox, ...updatedTimebox };
-                        TimeboxesAPI.replaceTimebox(timeboxToUpdate, accessToken)
-                        .then(
-                            (replacedTimebox) => dispatch(replaceTimebox(replacedTimebox))
-                        )
-                        dispatch(stopEditingTimebox());
-                    }}
-                /> :
-                <Timebox 
-                    key={timebox.id} 
-                    title={timebox.title} 
-                    totalTimeInMinutes={timebox.totalTimeInMinutes} 
-                    onDelete={() => 
-                        TimeboxesAPI.removeTimebox(timebox, accessToken)
-                            .then(
-                                () => dispatch(removeTimebox(timebox))
-                            )
-                    } 
-                    onEdit={() => dispatch(startEditingTimebox(timebox.id))} 
-                />
-            }
-        </>
+        const onUpdate = (updatedTimebox) => {
+            const timeboxToUpdate = { ...timebox, ...updatedTimebox };
+            TimeboxesAPI.replaceTimebox(timeboxToUpdate, accessToken)
+            .then(
+                (replacedTimebox) => dispatch(replaceTimebox(replacedTimebox))
+            )
+            dispatch(stopEditingTimebox());
+        };
+        const onDelete = () => 
+        TimeboxesAPI.removeTimebox(timebox, accessToken)
+            .then(
+                () => dispatch(removeTimebox(timebox))
+            );
+        return <EditableTimebox
+            timebox={timebox}
+            onUpdate={onUpdate}
+            onDelete={onDelete}
+        />;
     }
     function renderReadOnlyTimebox(timebox, index) {
         return <ReadOnlyTimebox
@@ -90,8 +78,7 @@ function TimeboxesManager() {
             <TimeboxCreator onCreate={handleCreate} />
             { areTimeboxesLoading(state) ? "Timeboxy się ładują..." : null}
             { getTimeboxesLoadingError(state) ? "Nie udało się załadować :(" : null }
-            <TimeboxesList 
-                timeboxes={getAllTimeboxes(state)} 
+            <AllTimeboxesList 
                 renderTimebox={renderTimebox}
             />
         </>
