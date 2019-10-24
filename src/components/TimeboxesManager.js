@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useContext } from "react";
-import { useStore } from "react-redux";
+import React, { useEffect, useContext } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import TimeboxCreator from "./TimeboxCreator";
 import TimeboxesAPI from "../api/FetchTimeboxesApi";
 import AuthenticationContext from "../contexts/AuthenticationContext";
@@ -9,21 +9,14 @@ import { areTimeboxesLoading, getTimeboxesLoadingError } from "../reducers";
 import { setTimeboxes, setError, disableLoadingIndicator, addTimebox, replaceTimebox, removeTimebox, stopEditingTimebox } from "../actions";
 import { EditableTimebox } from "./EditableTimebox";
 
-export function useForceUpdate() {
-    const [updateCounter, setUpdateCounter] = useState(0);
-    function forceUpdate() {
-        setUpdateCounter(prevCounter => prevCounter + 1);
-    }
-    return forceUpdate;
-}
-function TimeboxesManager() {
-    const store = useStore();
-    const forceUpdate = useForceUpdate();
-    const state = store.getState();
-    const dispatch = store.dispatch;
-    useEffect(() => store.subscribe(forceUpdate), []);
 
+function TimeboxesManager() {
+    const dispatch = useDispatch();
     const { accessToken } = useContext(AuthenticationContext);
+
+    const timeboxesLoading = useSelector(areTimeboxesLoading);
+    const timeboxesLoadingError = useSelector(getTimeboxesLoadingError);
+    
     useEffect(() => {
         TimeboxesAPI.getAllTimeboxes(accessToken).then(
             (timeboxes) => dispatch(setTimeboxes(timeboxes))
@@ -72,12 +65,11 @@ function TimeboxesManager() {
             totalTimeInMinutes={timebox.totalTimeInMinutes}
         />
     }
-    
     return (
         <>
             <TimeboxCreator onCreate={handleCreate} />
-            { areTimeboxesLoading(state) ? "Timeboxy się ładują..." : null}
-            { getTimeboxesLoadingError(state) ? "Nie udało się załadować :(" : null }
+            { timeboxesLoading ? "Timeboxy się ładują..." : null}
+            { timeboxesLoadingError ? "Nie udało się załadować :(" : null }
             <AllTimeboxesList 
                 renderTimebox={renderTimebox}
             />
