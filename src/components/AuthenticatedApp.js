@@ -9,12 +9,11 @@ function AuthenticatedApp({ onLogout }) {
     return (
         <>
             <Header>
-                <UserGreeting />
-                
+                <UserGreeting />      
             </Header>
             <TimeboxesManager />
             <CurrentTimebox 
-                        title="Opanowuję Redux" 
+                        title="Kończę Kurs Reacta" 
                         totalTimeInMinutes={29} 
                     />
             <InspirationalQuote />
