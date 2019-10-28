@@ -12,10 +12,7 @@ function AuthenticatedApp({ onLogout }) {
                 <UserGreeting />      
             </Header>
             <TimeboxesManager />
-            <CurrentTimebox 
-                        title="Kończę Kurs Reacta" 
-                        totalTimeInMinutes={29} 
-                    />
+            <CurrentTimebox />
             <InspirationalQuote />
         </>
     );
