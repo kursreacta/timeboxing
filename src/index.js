@@ -8,9 +8,9 @@ import { Provider } from "react-redux";
 import App from "./components/App";
 import "./styles/main.scss"
 
-import { timeboxesReducer } from "./reducers";
+import { rootReducer } from "./reducers";
 
-const store = createStore(timeboxesReducer, composeWithDevTools(
+const store = createStore(rootReducer, composeWithDevTools(
     applyMiddleware(thunk)
 ));
 
