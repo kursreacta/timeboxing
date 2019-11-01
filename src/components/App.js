@@ -3,7 +3,7 @@ import React from "react";
 import ErrorBoundary from "./ErrorBoundary";
 import LoginForm from "./LoginForm";
 import AuthenticationContext from "../contexts/AuthenticationContext";
-import AuthenticationAPI from "../api/FetchAuthenticationApi";
+import AuthenticationAPI from "../api/FakeAuthenticationApi";
 
 const AuthenticatedApp = React.lazy(() => import("./AuthenticatedApp"));
 

@@ -1,4 +1,4 @@
-import TimeboxesAPI from "./api/FetchTimeboxesApi";
+import TimeboxesAPI from "./api/FakeTimeboxesApi";
 import { isAnyTimeboxCurrent, getCurrentTimebox } from "./reducers";
 
 export const setTimeboxes = (timeboxes) => ({ type: "TIMEBOXES_SET", timeboxes })

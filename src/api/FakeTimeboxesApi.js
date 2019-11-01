@@ -1,12 +1,6 @@
 import uuid from "uuid";
+import { wait } from "./wait";
 
-function wait(ms=1000) {
-    return new Promise(
-        (resolve) => {
-            setTimeout(resolve, ms);
-        }
-    )
-}
 const timeboxes = [
     { "id": 1, "title": "Uczę się o promises", "totalTimeInMinutes": 25 },
     { "id": 2, "title": "Poznaję REST API", "totalTimeInMinutes": 10 },
@@ -22,19 +16,19 @@ function findIndexByAnId(id) {
 }
 const FakeTimeboxesAPI = {
     getAllTimeboxes: async function() {
-        await wait(1000);
+        await wait(200);
         console.log("GET all", timeboxes);
         return [...timeboxes];
     },
     addTimebox: async function(timeboxToAdd) {
-        await wait(1000);
+        await wait(200);
         const addedTimebox = {...timeboxToAdd, id: uuid.v4()};
         timeboxes.push(addedTimebox);
         console.log("POST", timeboxes);
         return addedTimebox;
     },
     replaceTimebox: async function(timeboxToReplace) {
-        await wait(1000);
+        await wait(200);
         if (!timeboxToReplace.id) {
             throw new Error("Cannot replace timebox without an id.")
         }
@@ -45,7 +39,7 @@ const FakeTimeboxesAPI = {
         return replacedTimebox;
     },
     removeTimebox: async function(timeboxToRemove) {
-        await wait(1000);
+        await wait(200);
         if (!timeboxToRemove.id) {
             throw new Error("Cannot remove timebox without an id.")
         }

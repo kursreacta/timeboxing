@@ -1,7 +1,7 @@
 import React, { useEffect, useContext } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import TimeboxCreator from "./TimeboxCreator";
-import TimeboxesAPI from "../api/FetchTimeboxesApi";
+import TimeboxesAPI from "../api/FakeTimeboxesApi";
 import AuthenticationContext from "../contexts/AuthenticationContext";
 import { RemainingTimeboxesList } from "./TimeboxesList";
 import ReadOnlyTimebox from "./ReadOnlyTimebox";
