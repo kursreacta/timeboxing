@@ -40,6 +40,7 @@ class TimeboxEditor extends React.Component {
                         ref={this.totalTimeInMinutesInput}
                         defaultValue={this.props.initialTotalTimeInMinutes}
                         type="number" 
+                        step="0.01"
                     />
                 </label><br />
                 <a onClick={this.handleCancel}>Anuluj</a>

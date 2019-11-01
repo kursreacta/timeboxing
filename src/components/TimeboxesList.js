@@ -1,9 +1,16 @@
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
-import { getAllTimeboxes } from "../reducers";
+import { getAllTimeboxes, getRemainingTimeboxes } from "../reducers";
 
 export function TimeboxesList({ timeboxes, renderTimebox }) {
     return <div className="TimeboxesList">{timeboxes.map(renderTimebox)}</div>;
 }
-const mapStateToProps = (state) => ({ timeboxes: getAllTimeboxes(state)});
-export const AllTimeboxesList = connect(mapStateToProps)(TimeboxesList);
+
+export const AllTimeboxesList = connect(
+    (state) => ({ timeboxes: getAllTimeboxes(state)})
+)(TimeboxesList);
+
+
+export const RemainingTimeboxesList = connect(
+    (state) => ({ timeboxes: getRemainingTimeboxes(state)})
+)(TimeboxesList);

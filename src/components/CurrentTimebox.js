@@ -3,6 +3,7 @@ import Clock from "./Clock";
 import ProgressBar from "./ProgressBar";
 import { getMinutesAndSecondsFromDurationInSeconds } from "../lib/time";
 import { getCurrentTimebox } from "../reducers";
+import { finishCurrentTimebox } from "../actions";
 import { connect } from "react-redux";
 
 class CurrentTimebox extends React.Component {
@@ -11,6 +12,7 @@ class CurrentTimebox extends React.Component {
         this.state = {
             isRunning: false,
             isPaused: false,
+            isFinished: false,
             pausesCount: 0,
             elapsedTimeInSeconds: 0
         }
@@ -19,7 +21,11 @@ class CurrentTimebox extends React.Component {
         this.togglePause = this.togglePause.bind(this)
         this.intervalId = null;
     }
-    
+    componentDidUpdate(prevProps, prevState) {
+        if (!prevState.isFinished && this.state.isFinished) {
+            this.props.onFinish();
+        }
+    }
     componentWillUnmount() {
         this.stopTimer();
     }
@@ -43,7 +49,18 @@ class CurrentTimebox extends React.Component {
             this.intervalId = window.setInterval(
                 () => {
                     this.setState(
-                        prevState => ({ elapsedTimeInSeconds: prevState.elapsedTimeInSeconds + 0.1 })
+                        prevState => {
+                            const { totalTimeInMinutes } = this.props;
+                            const totalTimeInSeconds = totalTimeInMinutes * 60;
+                            const elapsedTimeInSeconds = Math.min(prevState.elapsedTimeInSeconds + 0.1, totalTimeInSeconds);
+                            const isFinished = prevState.isFinished || elapsedTimeInSeconds >= totalTimeInSeconds;
+                            if (isFinished) {
+                                this.stopTimer();
+                            }
+                            const isRunning = prevState.isRunning && !isFinished;
+                            const isPaused = prevState.isPaused && !isFinished;
+                            return { elapsedTimeInSeconds, isFinished, isRunning, isPaused };
+                        }
                     )
                 },
                 100
@@ -71,7 +88,7 @@ class CurrentTimebox extends React.Component {
         )
     }
     render() {
-        const { isPaused, isRunning, pausesCount, elapsedTimeInSeconds } = this.state;
+        const { isFinished, isPaused, isRunning, pausesCount, elapsedTimeInSeconds } = this.state;
         const { title, totalTimeInMinutes } = this.props;
         const totalTimeInSeconds = totalTimeInMinutes * 60;
         const timeLeftInSeconds = totalTimeInSeconds - elapsedTimeInSeconds;
@@ -87,7 +104,7 @@ class CurrentTimebox extends React.Component {
                     color="red"
                     big
                 />
-                <button onClick={this.handleStart} disabled={isRunning}>Start</button>
+                <button onClick={this.handleStart} disabled={isRunning || isFinished }>Start</button>
                 <button onClick={this.handleStop} disabled={!isRunning}>Stop</button>
                 <button onClick={this.togglePause} disabled={!isRunning}>{isPaused ? "Wznów" : "Pauzuj"}</button>
                 Liczba przerw: {pausesCount}
@@ -96,10 +113,10 @@ class CurrentTimebox extends React.Component {
     }
 }
 
-function CurrentTimeboxOrNothing({ currentTimebox }) {
+function CurrentTimeboxOrNothing({ currentTimebox, onFinish }) {
     if (currentTimebox) {
         const { title, totalTimeInMinutes } = currentTimebox;
-        return <CurrentTimebox title={title} totalTimeInMinutes={totalTimeInMinutes} />
+        return <CurrentTimebox title={title} totalTimeInMinutes={totalTimeInMinutes} onFinish={onFinish} />
     } else {
         return null;
     }
@@ -113,4 +130,10 @@ function mapStateToProps(state) {
     };
 }
 
-export default connect(mapStateToProps)(CurrentTimeboxOrNothing);
+function mapDispatchToProps(dispatch, ownProps) {
+    return {
+        onFinish: () => dispatch(finishCurrentTimebox())
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(CurrentTimeboxOrNothing);

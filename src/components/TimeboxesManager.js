@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import TimeboxCreator from "./TimeboxCreator";
 import TimeboxesAPI from "../api/FetchTimeboxesApi";
 import AuthenticationContext from "../contexts/AuthenticationContext";
-import { AllTimeboxesList } from "./TimeboxesList";
+import { RemainingTimeboxesList } from "./TimeboxesList";
 import ReadOnlyTimebox from "./ReadOnlyTimebox";
 import { areTimeboxesLoading, getTimeboxesLoadingError } from "../reducers";
 import { fetchAllTimeboxes, addTimebox, replaceTimebox, removeTimeboxRemotely, stopEditingTimebox } from "../actions";
@@ -61,7 +61,7 @@ function TimeboxesManager() {
             <TimeboxCreator onCreate={handleCreate} />
             { timeboxesLoading ? "Timeboxy się ładują..." : null}
             { timeboxesLoadingError ? "Nie udało się załadować :(" : null }
-            <AllTimeboxesList 
+            <RemainingTimeboxesList 
                 renderTimebox={renderTimebox}
             />
         </>
