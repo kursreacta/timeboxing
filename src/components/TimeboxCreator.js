@@ -1,5 +1,4 @@
 import React from "react";
-import uuid from "uuid";
 
 class TimeboxCreator extends React.Component {
     constructor(props) {
@@ -10,7 +9,6 @@ class TimeboxCreator extends React.Component {
     handleSubmit = (event) => {
         event.preventDefault(); 
         this.props.onCreate({ 
-            id: uuid.v4(), 
             title: this.titleInput.current.value, 
             totalTimeInMinutes: this.totalTimeInMinutesInput.current.value
         });
@@ -32,7 +30,8 @@ class TimeboxCreator extends React.Component {
                     Ile minut?
                     <input 
                         ref={this.totalTimeInMinutesInput}
-                        type="number" 
+                        type="number"
+                        step="0.01"
                     />
                 </label><br />
                 <button 
